@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — EduVoice Kenya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --green: #1a6b3c; --green-dark: #0d3d22; --bg: #f6f8f5; --white: #ffffff; --text: #1a1a2e; --muted: #6b7280; --border: #e5e7eb; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+    a { color: var(--green); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    nav {
+      background: rgba(255,255,255,0.97); border-bottom: 1px solid var(--border);
+      padding: 0 2rem; height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100;
+    }
+    .nav-brand { font-weight: 700; font-size: 1.1rem; color: var(--green); display: flex; align-items: center; gap: 8px; }
+    .nav-back { font-size: 0.84rem; color: var(--muted); font-weight: 500; }
+    .nav-back:hover { color: var(--green); }
+
+    .hero-strip { background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%); color: white; padding: 3rem 1.5rem 2.5rem; }
+    .hero-strip-inner { max-width: 800px; margin: 0 auto; }
+    .badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); padding: 3px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; margin-bottom: 0.75rem; letter-spacing: 0.3px; }
+    .hero-strip h1 { font-size: 1.85rem; font-weight: 800; margin-bottom: 0.4rem; }
+    .hero-strip p { opacity: 0.85; font-size: 0.88rem; }
+
+    .doc-wrap { max-width: 800px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+    .version-bar { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem 1.25rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; font-size: 0.82rem; color: var(--muted); }
+    .version-bar strong { color: var(--text); }
+
+    .toc { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin-bottom: 2.5rem; }
+    .toc h3 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 0.9rem; }
+    .toc ol { padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.3rem; }
+    .toc li { font-size: 0.88rem; }
+
+    .doc-section { margin-bottom: 2.5rem; }
+    .doc-section h2 { font-size: 1.2rem; font-weight: 700; color: var(--green); padding-top: 1rem; border-top: 2px solid #d1fae5; margin-bottom: 0.75rem; }
+    .doc-section h3 { font-size: 1rem; font-weight: 600; margin: 1.25rem 0 0.4rem; }
+    .doc-section p { font-size: 0.9rem; color: #374151; margin-bottom: 0.7rem; }
+    .doc-section ul, .doc-section ol { padding-left: 1.4rem; margin-bottom: 0.7rem; }
+    .doc-section li { font-size: 0.9rem; color: #374151; margin-bottom: 0.3rem; }
+    .highlight { background: #fef9e7; border-left: 3px solid #e8a020; padding: 0.9rem 1.1rem; border-radius: 0 8px 8px 0; margin: 0.75rem 0; font-size: 0.88rem; }
+    .note { background: #f0fdf4; border-left: 3px solid var(--green); padding: 0.9rem 1.1rem; border-radius: 0 8px 8px 0; margin: 0.75rem 0; font-size: 0.88rem; }
+
+    .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.86rem; }
+    .data-table th { background: #f0fdf4; color: var(--green); font-weight: 600; padding: 0.6rem 0.85rem; text-align: left; border: 1px solid #d1fae5; }
+    .data-table td { padding: 0.6rem 0.85rem; border: 1px solid var(--border); vertical-align: top; }
+    .data-table tr:nth-child(even) td { background: #f9fafb; }
+
+    footer { background: var(--text); color: rgba(255,255,255,0.65); padding: 2rem 1.5rem; text-align: center; font-size: 0.8rem; }
+    footer a { color: rgba(255,255,255,0.75); }
+    footer a:hover { color: white; text-decoration: underline; }
+    .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">🎓 EduVoice Kenya</div>
+  <a href="/" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="hero-strip">
+  <div class="hero-strip-inner">
+    <div class="badge">Legal Document</div>
+    <h1>Privacy Policy</h1>
+    <p>How EduVoice Kenya collects, uses, and protects your information.</p>
+  </div>
+</div>
+
+<div class="doc-wrap">
+
+  <div class="version-bar">
+    <span><strong>Version:</strong> 1.0 (Initial Release)</span>
+    <span><strong>Effective Date:</strong> January 2025</span>
+    <span><strong>Last Updated:</strong> January 2025</span>
+  </div>
+
+  <div class="note">
+    <strong>Your privacy matters.</strong> EduVoice Kenya serves students including children. We have designed the Platform with privacy and anonymity as core principles, not afterthoughts. This policy will evolve as the Platform grows — we will notify users of material changes.
+  </div>
+
+  <div class="toc">
+    <h3>Table of Contents</h3>
+    <ol>
+      <li><a href="#who-we-are">Who We Are</a></li>
+      <li><a href="#what-we-collect">What Information We Collect</a></li>
+      <li><a href="#how-we-use">How We Use Your Information</a></li>
+      <li><a href="#anonymity">Our Anonymity Commitment</a></li>
+      <li><a href="#sharing">Sharing of Information</a></li>
+      <li><a href="#children">Children's Privacy</a></li>
+      <li><a href="#retention">Data Retention</a></li>
+      <li><a href="#security">Data Security</a></li>
+      <li><a href="#rights">Your Rights Under the Kenya Data Protection Act</a></li>
+      <li><a href="#cookies">Cookies and Local Storage</a></li>
+      <li><a href="#third-party">Third-Party Services</a></li>
+      <li><a href="#updates">Updates to This Policy</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+    </ol>
+  </div>
+
+  <!-- 1 -->
+  <div class="doc-section" id="who-we-are">
+    <h2>1. Who We Are</h2>
+    <p>EduVoice Kenya ("we", "us", "our") operates a multi-role school feedback and CRM platform for Kenyan schools. This Privacy Policy explains how we collect, use, disclose, and protect personal data in connection with the EduVoice Kenya platform.</p>
+    <p>This policy applies to all users of the Platform: students, teachers, parents, and school administrators.</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="doc-section" id="what-we-collect">
+    <h2>2. What Information We Collect</h2>
+    <p>We collect only the information necessary to provide the Platform's educational feedback functions.</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Data Collected</th>
+          <th>Who It Applies To</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Account Identity</strong></td>
+          <td>Username, first name, last name, email address, role, school</td>
+          <td>All users</td>
+        </tr>
+        <tr>
+          <td><strong>Authentication</strong></td>
+          <td>Hashed password (never stored in plain text)</td>
+          <td>All users</td>
+        </tr>
+        <tr>
+          <td><strong>Review Data</strong></td>
+          <td>Subject ratings (1–5), soft skill self-ratings, open-text comments</td>
+          <td>Students</td>
+        </tr>
+        <tr>
+          <td><strong>Teacher Assessments</strong></td>
+          <td>Self-assessment responses, syllabus coverage, goals</td>
+          <td>Teachers</td>
+        </tr>
+        <tr>
+          <td><strong>Parent Notes</strong></td>
+          <td>Encouraging notes left for children</td>
+          <td>Parents/Guardians</td>
+        </tr>
+        <tr>
+          <td><strong>School Structure</strong></td>
+          <td>Classroom assignments, enrolments, teacher–subject assignments</td>
+          <td>All users (managed by admin)</td>
+        </tr>
+        <tr>
+          <td><strong>Usage Data</strong></td>
+          <td>Login timestamps, review submission timestamps</td>
+          <td>All users</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="highlight">We do not collect: biometric data, health data, financial data, or device/location tracking data.</div>
+  </div>
+
+  <!-- 3 -->
+  <div class="doc-section" id="how-we-use">
+    <h2>3. How We Use Your Information</h2>
+    <p>We use the information collected exclusively to:</p>
+    <ul>
+      <li>Provide and operate the Platform's feedback and reporting features.</li>
+      <li>Display role-appropriate dashboards and reports to each user type.</li>
+      <li>Enable school administrators to manage review periods and view CRM analytics.</li>
+      <li>Facilitate password reset communications (via email).</li>
+      <li>Maintain platform security, detect abuse, and debug technical issues.</li>
+      <li>Improve the Platform over time based on aggregated, de-identified usage patterns.</li>
+    </ul>
+    <p>We do <strong>not</strong> use your data for advertising, profiling for commercial purposes, or to train external AI models.</p>
+  </div>
+
+  <!-- 4 -->
+  <div class="doc-section" id="anonymity">
+    <h2>4. Our Anonymity Commitment</h2>
+    <p>Anonymity for student reviewers is a core platform principle, enforced at the application code level:</p>
+    <ul>
+      <li><strong>Teachers</strong> see only aggregated averages and anonymous open-text comments — never individual student names or identities linked to a specific review.</li>
+      <li><strong>Parents</strong> see only their own children's data.</li>
+      <li><strong>School administrators</strong> have access to individual student data solely for safeguarding and school management purposes.</li>
+      <li>No user can see the raw database records of another user's personal information through the Platform interface.</li>
+    </ul>
+    <div class="note">This anonymity is enforced in the view layer of the application code. It is not merely a policy — it is a technical constraint.</div>
+  </div>
+
+  <!-- 5 -->
+  <div class="doc-section" id="sharing">
+    <h2>5. Sharing of Information</h2>
+    <p>We do not sell, rent, or trade personal data. We may share data only in the following limited circumstances:</p>
+    <h3>Within Your School</h3>
+    <p>Data is shared with appropriate users within the same school (e.g., a teacher sees aggregated feedback from their class; an admin sees school-wide analytics). Data is never shared across schools.</p>
+    <h3>Service Providers</h3>
+    <p>We may use third-party infrastructure providers (e.g., hosting, email delivery) who process data on our behalf. These providers are contractually bound to use data only to provide their services to us and to maintain appropriate security standards.</p>
+    <h3>Legal Requirements</h3>
+    <p>We may disclose data if required to do so by law, court order, or a competent Kenyan regulatory authority. We will notify affected users where legally permitted to do so.</p>
+    <h3>School Safeguarding</h3>
+    <p>In cases where student welfare is at risk, data may be shared with school safeguarding officers or relevant authorities as required by Kenyan child protection law.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="doc-section" id="children">
+    <h2>6. Children's Privacy</h2>
+    <p>EduVoice Kenya is designed to serve students from Grade 1 (approximately age 6) upward. We take the privacy of children seriously:</p>
+    <ul>
+      <li>Student accounts are created by or through school administrators, not directly by children.</li>
+      <li>We collect only the minimum data necessary for the educational feedback function.</li>
+      <li>Student review data is anonymous to all except school administrators acting in a safeguarding capacity.</li>
+      <li>We do not display targeted advertising to any user, including children.</li>
+      <li>School administrators accept responsibility for obtaining any parental consent required under Kenyan law before enrolling minor students.</li>
+    </ul>
+    <p>This Platform is compliant with the Kenya Data Protection Act, 2019, as it applies to processing personal data of minors.</p>
+  </div>
+
+  <!-- 7 -->
+  <div class="doc-section" id="retention">
+    <h2>7. Data Retention</h2>
+    <p>We retain data for as long as a school's account is active and as needed to provide the Service. Specifically:</p>
+    <ul>
+      <li><strong>Active accounts:</strong> Data is retained for the duration of the school's use of the Platform.</li>
+      <li><strong>Review data:</strong> Historical semester reviews are retained to enable longitudinal trend analysis within the school.</li>
+      <li><strong>Deleted accounts:</strong> Personal data associated with a deleted user account is anonymised or deleted within 30 days.</li>
+      <li><strong>School account closure:</strong> All school data is permanently deleted within 30 days of account closure, upon written request.</li>
+    </ul>
+    <div class="note">If your school requests data deletion, please contact us at the address in Section 13. We will confirm deletion within 30 days.</div>
+  </div>
+
+  <!-- 8 -->
+  <div class="doc-section" id="security">
+    <h2>8. Data Security</h2>
+    <p>We implement technical and organisational measures to protect personal data, including:</p>
+    <ul>
+      <li>Passwords stored as secure cryptographic hashes (never in plain text).</li>
+      <li>CSRF protection on all forms.</li>
+      <li>Multi-tenant data isolation — each school's data is scoped by school ID at the query level.</li>
+      <li>Role-based access controls enforced in the application layer.</li>
+      <li>HTTPS encryption for data in transit (enforced in production deployments).</li>
+    </ul>
+    <div class="highlight">No system is completely secure. If you discover a security vulnerability in EduVoice Kenya, please report it responsibly to our contact email rather than publicly disclosing it.</div>
+  </div>
+
+  <!-- 9 -->
+  <div class="doc-section" id="rights">
+    <h2>9. Your Rights Under the Kenya Data Protection Act, 2019</h2>
+    <p>Under the Kenya Data Protection Act, 2019, you have the following rights regarding your personal data:</p>
+    <ul>
+      <li><strong>Right of access:</strong> You may request a copy of the personal data we hold about you.</li>
+      <li><strong>Right to rectification:</strong> You may request correction of inaccurate data.</li>
+      <li><strong>Right to erasure:</strong> You may request deletion of your personal data, subject to legal retention requirements.</li>
+      <li><strong>Right to object:</strong> You may object to processing of your personal data in certain circumstances.</li>
+      <li><strong>Right to data portability:</strong> You may request your data in a structured, machine-readable format.</li>
+    </ul>
+    <p>To exercise any of these rights, contact your school administrator (for account-level changes) or contact us directly at the address in Section 13.</p>
+    <p>You also have the right to lodge a complaint with the <strong>Office of the Data Protection Commissioner (ODPC)</strong> of Kenya at <a href="https://www.odpc.go.ke" target="_blank" rel="noopener">www.odpc.go.ke</a>.</p>
+  </div>
+
+  <!-- 10 -->
+  <div class="doc-section" id="cookies">
+    <h2>10. Cookies and Local Storage</h2>
+    <p>EduVoice Kenya uses the following browser storage mechanisms:</p>
+    <ul>
+      <li><strong>Session cookies:</strong> Used to maintain your login session. These are deleted when you close your browser or sign out.</li>
+      <li><strong>CSRF cookies:</strong> Required security tokens to protect form submissions from cross-site request forgery attacks.</li>
+    </ul>
+    <p>We do not use advertising cookies, third-party tracking cookies, or analytics cookies that profile your behaviour across other websites.</p>
+  </div>
+
+  <!-- 11 -->
+  <div class="doc-section" id="third-party">
+    <h2>11. Third-Party Services</h2>
+    <p>The Platform currently uses the following third-party services:</p>
+    <ul>
+      <li><strong>Google Fonts (fonts.googleapis.com):</strong> Loads the Inter typeface for the user interface. Google may log the font request (your IP address). You can review Google's privacy policy at <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a>.</li>
+      <li><strong>Email delivery (SMTP):</strong> Password reset emails are sent via a configured SMTP provider. No email content is stored beyond the sending event.</li>
+    </ul>
+    <p>As the Platform grows and additional third-party services are integrated (e.g., payment processors, SMS gateways, PDF generation services), this section will be updated accordingly.</p>
+  </div>
+
+  <!-- 12 -->
+  <div class="doc-section" id="updates">
+    <h2>12. Updates to This Policy</h2>
+    <p>We will update this Privacy Policy as the Platform adds features and as applicable privacy laws evolve. Planned future areas include:</p>
+    <ul>
+      <li>Mobile application data collection practices</li>
+      <li>PDF export processing</li>
+      <li>API integration data flows</li>
+      <li>Payment processing for subscription plans</li>
+      <li>Multi-language content handling</li>
+    </ul>
+    <p>Material updates will be communicated through in-Platform notifications. The "Last Updated" date at the top of this document reflects the most recent revision. Continued use of the Platform after an update constitutes acceptance of the revised policy.</p>
+  </div>
+
+  <!-- 13 -->
+  <div class="doc-section" id="contact">
+    <h2>13. Contact Us</h2>
+    <p>For any questions, requests, or concerns about this Privacy Policy or your personal data:</p>
+    <ul>
+      <li><strong>Platform:</strong> EduVoice Kenya</li>
+      <li><strong>Email:</strong> <a href="mailto:privacy@eduvoicekenya.co.ke">privacy@eduvoicekenya.co.ke</a></li>
+      <li><strong>General support:</strong> <a href="mailto:support@eduvoicekenya.co.ke">support@eduvoicekenya.co.ke</a></li>
+      <li><strong>Kenya Data Protection Commissioner:</strong> <a href="https://www.odpc.go.ke" target="_blank" rel="noopener">www.odpc.go.ke</a></li>
+    </ul>
+    <p>We aim to respond to all privacy-related enquiries within 14 business days.</p>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2025 EduVoice Kenya. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/terms/">Terms &amp; Conditions</a>
+    <a href="/privacy/">Privacy Policy</a>
+    <a href="/accounts/login/">Sign In</a>
+  </div>
+</footer>
+
+</body>
+</html>

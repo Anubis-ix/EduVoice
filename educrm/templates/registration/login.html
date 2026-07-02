@@ -29,6 +29,10 @@
     .footer-links { display: flex; justify-content: space-between; margin-top: 1rem; font-size: 0.8rem; }
     .footer-links a { color: #1a6b3c; text-decoration: none; font-weight: 600; }
     .footer-links a:hover { text-decoration: underline; }
+    .footer-meta { text-align: center; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #f3f4f6; }
+    .footer-meta a { font-size: 0.75rem; color: #9ca3af; text-decoration: none; }
+    .footer-meta a:hover { color: #1a6b3c; }
+    .footer-meta span { color: #e5e7eb; margin: 0 0.4rem; }
   </style>
 </head>
 <body>
@@ -36,7 +40,7 @@
   <div class="logo">
     <span class="emoji">🎓</span>
     <h1>EduVoice Kenya</h1>
-    <p>Student & Teacher Feedback System</p>
+    <p>Student &amp; Teacher Feedback System</p>
   </div>
 
   <div class="badge-strip">
@@ -60,12 +64,20 @@
       <label>Password</label>
       <input type="password" name="password" placeholder="Enter your password" required>
     </div>
-    <button type="submit" class="btn">Sign in →</button>
+    <button type="submit" class="btn">Sign in &rarr;</button>
   </form>
 
   <div class="footer-links">
     <a href="{% url 'password_reset' %}">Forgot password?</a>
     <a href="{% url 'register' %}">Create account</a>
+  </div>
+
+  <div class="footer-meta">
+    <a href="/">&larr; Back to Home</a>
+    <span>&middot;</span>
+    <a href="{% url 'terms' %}">Terms</a>
+    <span>&middot;</span>
+    <a href="{% url 'privacy' %}">Privacy</a>
   </div>
 </div>
 </body>

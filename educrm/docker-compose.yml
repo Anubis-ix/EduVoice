@@ -1,0 +1,19 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=dev-secret-key-change-in-prod
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - EMAIL_BACKEND=console
+    volumes:
+      # Live-reload source during development
+      - .:/app
+      # Persist the SQLite database across container restarts
+      - sqlite_data:/app/db.sqlite3
+    command: python manage.py runserver 0.0.0.0:8000
+
+volumes:
+  sqlite_data:
