@@ -3,31 +3,26 @@
 # HOW TO USE:
 #   1. Push this repo to GitHub.
 #   2. Go to https://dashboard.render.com → New → Blueprint.
-#   3. Connect your GitHub repo — Render will detect this file automatically.
-#   4. Set the SECRET_KEY environment variable in the Render dashboard (or via the env group below).
-#   5. Click Deploy. Your app will be live at https://eduvoice-kenya.onrender.com (or similar).
+#   3. Connect your GitHub repo and set Blueprint Path to: educrm/render.yaml
+#   4. Click Apply — your app will be live at https://eduvoice-kenya.onrender.com
 #
-# NOTE: The free tier spins down after 15 minutes of inactivity — first request takes ~30s.
-#       Upgrade to Starter ($7/mo) to keep it always-on for a proper review.
+# NOTE: Free tier spins down after 15 min of inactivity (first request ~30s cold start).
 
 services:
   - type: web
     name: eduvoice-kenya
     runtime: docker
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: ./educrm/Dockerfile
+    dockerContext: ./educrm
     plan: free
     region: oregon
 
     envVars:
       - key: SECRET_KEY
-        generateValue: true          # Render auto-generates a secure random value
+        generateValue: true
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
         value: ".onrender.com"
       - key: EMAIL_BACKEND
-        value: "console"             # Change to 'smtp' and add SMTP vars when ready
-
-    # Render runs this after pulling new code — applies DB migrations automatically
-    buildCommand: "python manage.py migrate --noinput && python manage.py collectstatic --noinput"
-    startCommand: "gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
+        value: "console"

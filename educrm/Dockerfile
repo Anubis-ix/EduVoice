@@ -29,4 +29,4 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 
 # Gunicorn: 2 workers is fine for a review/demo deployment
-CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "120"]
+CMD sh -c "python manage.py migrate --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 2 --timeout 120"
