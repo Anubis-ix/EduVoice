@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}My Reviews — {{ semester.name }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Term Reviews</h1>
+  <p>{{ semester.name }} · {{ classroom }}</p>
+</div>
+
+<div class="alert alert-info" style="background:#f0fdf4; color:#166534;">
+  🌱 Your voice matters. Be honest — your teacher only ever sees the average, never your name.
+</div>
+
+<div class="card">
+  <div class="card-header">Subject reviews</div>
+  {% for item in review_items %}
+  <div class="row-item">
+    <div>
+      <div style="font-weight:600; font-size:0.9rem;">{{ item.assignment.subject.icon }} {{ item.assignment.subject.name }}</div>
+      <div style="font-size:0.78rem; color:var(--muted);">{{ item.assignment.teacher.get_full_name }}</div>
+    </div>
+    {% if item.submitted %}
+      <span class="chip chip-green">✓ Done</span>
+    {% else %}
+      <a href="{% url 'submit_review' item.assignment.id %}" class="btn btn-primary btn-sm">Review →</a>
+    {% endif %}
+  </div>
+  {% empty %}
+  <p style="color:var(--muted); font-size:0.88rem;">No subjects assigned to your class yet.</p>
+  {% endfor %}
+</div>
+
+<div class="card">
+  <div class="card-header">Values & skills reflection</div>
+  <p style="font-size:0.85rem; color:var(--muted); margin-bottom:0.9rem;">
+    Rate yourself on the skills that matter beyond the classroom.
+  </p>
+  {% for skill in soft_skills %}
+  <div class="row-item">
+    <span style="font-size:0.88rem;">{{ skill.icon }} {{ skill.name }}</span>
+    {% if skill.id in rated_skill_ids %}
+      <span class="chip chip-green">✓ Rated</span>
+    {% else %}
+      <span class="chip chip-yellow">Pending</span>
+    {% endif %}
+  </div>
+  {% endfor %}
+  <a href="{% url 'submit_softskills' %}" class="btn btn-primary btn-sm" style="margin-top:1rem; width:100%; justify-content:center;">
+    {% if rated_skill_ids %}Update Skills Reflection{% else %}Start Skills Reflection{% endif %} →
+  </a>
+</div>
+
+{% if all_done %}
+<div class="card" style="background:#f0fdf4; border-color:#86efac; text-align:center; padding:1.75rem;">
+  <div style="font-size:1.75rem;">🎉</div>
+  <div style="font-weight:700; color:#166534; margin-top:6px;">All done!</div>
+  <div style="font-size:0.85rem; color:#166534; margin-top:2px;">Thank you for sharing your thoughts this term.</div>
+</div>
+{% endif %}
+{% endblock %}

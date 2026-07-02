@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}EduVoice Kenya{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1a6b3c;
+      --primary-light: #27a85f;
+      --accent: #e8a020;
+      --red: #c0392b;
+      --bg: #f6f7f9;
+      --card: #ffffff;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+      --border: #e8e9ec;
+      --radius: 14px;
+      --sidebar-w: 220px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    a { color: inherit; }
+
+    /* ───────── DESKTOP SIDEBAR ───────── */
+    .sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w);
+      background: var(--card); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; padding: 1.5rem 1rem; z-index: 50;
+    }
+    .sidebar-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.05rem; color: var(--primary); padding: 0 0.5rem 1.5rem; }
+    .sidebar-brand .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+    .nav-section-label { font-size: 0.7rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; padding: 0.5rem 0.75rem 0.4rem; margin-top: 0.5rem; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 0.65rem 0.75rem; border-radius: 10px;
+      color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; margin-bottom: 2px; transition: all 0.15s;
+    }
+    .nav-item .ico { font-size: 1.1rem; width: 22px; text-align: center; }
+    .nav-item:hover { background: #f0fdf4; color: var(--primary); }
+    .nav-item.active { background: var(--primary); color: white; }
+    .sidebar-footer { margin-top: auto; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .sidebar-user { display: flex; align-items: center; gap: 10px; padding: 0.5rem 0.75rem; }
+    .sidebar-user .avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85rem; flex-shrink: 0; }
+    .sidebar-user-info { overflow: hidden; }
+    .sidebar-user-info .name { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sidebar-user-info .role { font-size: 0.72rem; color: var(--muted); }
+    .sidebar-signout { display: block; text-align: center; font-size: 0.78rem; color: var(--muted); text-decoration: none; padding: 0.5rem; margin-top: 0.25rem; }
+
+    /* ───────── TOP BAR (mobile only) ───────── */
+    .topbar {
+      display: none; position: sticky; top: 0; z-index: 40;
+      background: var(--card); border-bottom: 1px solid var(--border);
+      padding: 0.85rem 1rem; align-items: center; justify-content: space-between;
+    }
+    .topbar-brand { font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 6px; }
+    .topbar-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.8rem; }
+
+    /* ───────── MAIN CONTENT ───────── */
+    .main { margin-left: var(--sidebar-w); min-height: 100vh; padding-bottom: 2rem; }
+    .page { max-width: 880px; margin: 0 auto; padding: 2rem 1.5rem 1rem; }
+    .page-header { margin-bottom: 1.75rem; }
+    .page-header h1 { font-size: 1.5rem; font-weight: 700; }
+    .page-header p { color: var(--muted); margin-top: 2px; font-size: 0.9rem; }
+
+    /* ───────── PRIMARY ACTION CARD (the single most important thing) ───────── */
+    .hero-action {
+      background: linear-gradient(135deg, var(--primary) 0%, #145530 100%);
+      border-radius: 18px; padding: 1.5rem 1.6rem; color: white; margin-bottom: 1.5rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    }
+    .hero-action .label { font-size: 0.75rem; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+    .hero-action .headline { font-size: 1.2rem; font-weight: 700; margin-top: 4px; }
+    .hero-action .sub { font-size: 0.85rem; opacity: 0.85; margin-top: 2px; }
+    .hero-action .btn-white { background: white; color: var(--primary); padding: 0.7rem 1.4rem; border-radius: 10px; font-weight: 600; font-size: 0.9rem; text-decoration: none; white-space: nowrap; }
+
+    /* ───────── CARDS ───────── */
+    .card { background: var(--card); border-radius: var(--radius); padding: 1.25rem 1.4rem; border: 1px solid var(--border); }
+    .card + .card { margin-top: 1rem; }
+    .card-header { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.9rem; display: flex; align-items: center; gap: 6px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.85rem; }
+
+    .mini-stat { background: #f9fafb; border-radius: 12px; padding: 0.9rem 1rem; }
+    .mini-stat .value { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+    .mini-stat .label { font-size: 0.74rem; color: var(--muted); font-weight: 500; margin-top: 2px; }
+
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0.6rem 1.1rem; border-radius: 10px; font-size: 0.875rem; font-weight: 600; border: none; cursor: pointer; text-decoration: none; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-outline { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
+    .btn-sm { padding: 0.4rem 0.85rem; font-size: 0.8rem; }
+
+    .chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+    .chip-green { background: #d1fae5; color: #065f46; }
+    .chip-yellow { background: #fef3c7; color: #92400e; }
+    .chip-gray { background: #f3f4f6; color: #4b5563; }
+
+    .row-item { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+    .row-item:last-child { border-bottom: none; }
+
+    .progress-bar { background: #eef0f3; border-radius: 99px; height: 8px; overflow: hidden; }
+    .progress-fill { background: var(--accent); height: 100%; border-radius: 99px; }
+
+    .alert { padding: 0.8rem 1.1rem; border-radius: 10px; margin-bottom: 1.25rem; font-size: 0.875rem; font-weight: 500; }
+    .alert-success { background: #d1fae5; color: #065f46; }
+    .alert-warning { background: #fef3c7; color: #92400e; }
+    .alert-info { background: #dbeafe; color: #1e40af; }
+    .alert-error { background: #fee2e2; color: #991b1b; }
+
+    .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--muted); }
+    .empty-state .icon { font-size: 2.25rem; margin-bottom: 0.75rem; }
+
+    /* ───────── MOBILE BOTTOM TAB BAR ───────── */
+    .bottom-nav {
+      display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+      background: var(--card); border-top: 1px solid var(--border);
+      padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
+      justify-content: space-around;
+    }
+    .bottom-nav a {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      text-decoration: none; color: var(--muted); font-size: 0.66rem; font-weight: 600; flex: 1;
+      padding: 4px 0;
+    }
+    .bottom-nav a .ico { font-size: 1.25rem; }
+    .bottom-nav a.active { color: var(--primary); }
+
+    /* ───────── RESPONSIVE ───────── */
+    @media (max-width: 860px) {
+      .sidebar { display: none; }
+      .topbar { display: flex; }
+      .bottom-nav { display: flex; }
+      .main { margin-left: 0; padding-bottom: 76px; }
+      .page { padding: 1.25rem 1rem 1rem; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr 1fr; }
+      .hero-action { flex-direction: column; align-items: flex-start; }
+      .hero-action .btn-white { width: 100%; text-align: center; }
+    }
+  </style>
+  <style>
+    /* ───────── COMPATIBILITY LAYER for non-migrated pages (reviews, profile, teacher/parent/admin) ───────── */
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .stat-card { background: var(--card); border-radius: var(--radius); padding: 1.1rem; border: 1px solid var(--border); }
+    .stat-card .value { font-size: 1.7rem; font-weight: 700; color: var(--primary); }
+    .stat-card .label { font-size: 0.76rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; margin-top: 4px; }
+    .stat-card .icon { font-size: 1.3rem; margin-bottom: 0.4rem; }
+
+    .form-group { margin-bottom: 1.4rem; }
+    .form-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .form-help { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem; }
+    .form-control { width: 100%; padding: 0.6rem 0.85rem; border: 2px solid var(--border); border-radius: 8px; font-size: 0.92rem; font-family: inherit; background: white; }
+    .form-control:focus { outline: none; border-color: var(--primary); }
+    textarea.form-control { resize: vertical; }
+
+    .radio-group { display: flex; gap: 0.65rem; flex-wrap: wrap; margin-top: 0.4rem; }
+    .radio-group input[type=radio] { display: none; }
+    .radio-group label { padding: 0.45rem 0.9rem; border: 2px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 1rem; transition: all 0.15s; }
+    .radio-group input[type=radio]:checked + label { border-color: var(--primary); background: var(--primary); color: white; }
+
+    .table { width: 100%; border-collapse: collapse; }
+    .table th { text-align: left; padding: 0.65rem 0.85rem; font-size: 0.74rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 2px solid var(--border); }
+    .table td { padding: 0.75rem 0.85rem; font-size: 0.88rem; border-bottom: 1px solid var(--border); }
+    .table tr:last-child td { border-bottom: none; }
+
+    .stars { color: var(--accent); font-size: 1.05rem; letter-spacing: 2px; }
+    .rating-bar { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.45rem; }
+    .rating-bar-label { font-size: 0.78rem; color: var(--muted); width: 150px; flex-shrink: 0; }
+    .rating-bar-track { flex: 1; background: var(--border); border-radius: 99px; height: 7px; }
+    .rating-bar-fill { height: 100%; border-radius: 99px; background: var(--primary-light); }
+    .rating-bar-value { font-size: 0.82rem; font-weight: 600; width: 28px; text-align: right; }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+    .text-muted { color: var(--muted); }
+    .text-sm { font-size: 0.84rem; }
+    .mt-1 { margin-top: 0.5rem; } .mt-2 { margin-top: 1rem; } .mt-3 { margin-top: 1.5rem; } .mt-4 { margin-top: 2rem; }
+    .mb-1 { margin-bottom: 0.5rem; } .mb-2 { margin-bottom: 1rem; } .mb-3 { margin-bottom: 1.5rem; }
+    .flex { display: flex; } .items-center { align-items: center; } .justify-between { justify-content: space-between; } .gap-1 { gap: 0.5rem; } .gap-2 { gap: 1rem; }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+{% if user.is_authenticated %}
+
+<!-- DESKTOP SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand"><span class="dot"></span> EduVoice Kenya</div>
+
+  <div class="nav-section-label">Menu</div>
+  <a href="{% url 'dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+    <span class="ico">⌂</span> Dashboard
+  </a>
+  {% if user.is_student %}
+    <a href="{% url 'student_review_home' %}" class="nav-item"><span class="ico">✎</span> My Reviews</a>
+  {% elif user.is_teacher %}
+    <a href="{% url 'teacher_feedback' %}" class="nav-item"><span class="ico">◔</span> Feedback</a>
+  {% elif user.is_parent %}
+    <a href="{% url 'parent_report' %}" class="nav-item"><span class="ico">▤</span> Reports</a>
+  {% elif user.is_school_admin %}
+    <a href="{% url 'admin_dashboard' %}" class="nav-item"><span class="ico">◆</span> Analytics</a>
+  {% endif %}
+  <a href="{% url 'profile' %}" class="nav-item"><span class="ico">○</span> Profile</a>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="avatar">{{ user.first_name|first }}{{ user.last_name|first }}</div>
+      <div class="sidebar-user-info">
+        <div class="name">{{ user.get_full_name }}</div>
+        <div class="role">{{ user.get_role_display }}</div>
+      </div>
+    </div>
+    <a href="{% url 'logout' %}" class="sidebar-signout">Sign out</a>
+  </div>
+</aside>
+
+<!-- MOBILE TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">🎓 EduVoice</div>
+  <a href="{% url 'profile' %}" class="topbar-avatar">{{ user.first_name|first }}{{ user.last_name|first }}</a>
+</div>
+
+<!-- MOBILE BOTTOM TAB BAR -->
+<nav class="bottom-nav">
+  <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+    <span class="ico">⌂</span> Home
+  </a>
+  {% if user.is_student %}
+    <a href="{% url 'student_review_home' %}"><span class="ico">✎</span> Reviews</a>
+  {% elif user.is_teacher %}
+    <a href="{% url 'teacher_feedback' %}"><span class="ico">◔</span> Feedback</a>
+  {% elif user.is_parent %}
+    <a href="{% url 'parent_report' %}"><span class="ico">▤</span> Reports</a>
+  {% elif user.is_school_admin %}
+    <a href="{% url 'admin_dashboard' %}"><span class="ico">◆</span> Analytics</a>
+  {% endif %}
+  <a href="{% url 'profile' %}"><span class="ico">○</span> Profile</a>
+  <a href="{% url 'logout' %}"><span class="ico">⏻</span> Sign out</a>
+</nav>
+{% endif %}
+
+<div class="main">
+  <div class="page">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </div>
+</div>
+
+{% block extra_js %}{% endblock %}
+<script>
+  document.querySelectorAll('.progress-fill[data-pct]').forEach(function(el) {
+    el.style.width = el.dataset.pct + '%';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}My Profile — EduVoice{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>My Profile</h1>
+  <p>Account details and settings</p>
+</div>
+
+<div class="card" style="max-width: 480px;">
+  <div style="display:flex; align-items:center; gap:14px; padding-bottom:1.1rem; margin-bottom:1.1rem; border-bottom:1px solid var(--border);">
+    <div style="width:56px; height:56px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.2rem; flex-shrink:0;">
+      {{ user.first_name|first }}{{ user.last_name|first }}
+    </div>
+    <div>
+      <div style="font-weight:700; font-size:1.05rem;">{{ user.get_full_name }}</div>
+      <span class="chip chip-green">{{ user.get_role_display }}</span>
+    </div>
+  </div>
+
+  <div class="row-item">
+    <span style="color:var(--muted); font-size:0.85rem;">Username</span>
+    <span style="font-weight:600; font-size:0.88rem;">{{ user.username }}</span>
+  </div>
+  <div class="row-item">
+    <span style="color:var(--muted); font-size:0.85rem;">School</span>
+    <span style="font-weight:600; font-size:0.88rem;">{{ user.school|default:"Not set" }}</span>
+  </div>
+  <div class="row-item">
+    <span style="color:var(--muted); font-size:0.85rem;">Email</span>
+    <span style="font-weight:600; font-size:0.88rem;">{{ user.email|default:"Not set" }}</span>
+  </div>
+  {% if user.phone %}
+  <div class="row-item">
+    <span style="color:var(--muted); font-size:0.85rem;">Phone</span>
+    <span style="font-weight:600; font-size:0.88rem;">{{ user.phone }}</span>
+  </div>
+  {% endif %}
+
+  <a href="{% url 'logout' %}" class="btn btn-outline btn-sm" style="margin-top:1.1rem; width:100%; justify-content:center;">Sign out</a>
+</div>
+{% endblock %}
