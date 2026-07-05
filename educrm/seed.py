@@ -15,12 +15,13 @@ from django.utils import timezone
 from datetime import date
 from accounts.models import User
 from schools.models import School, ClassRoom, Enrollment, TeacherAssignment, ParentStudentLink
-from curriculum.models import Subject, SoftSkill
+from curriculum.models import Subject, SoftSkill, CurriculumFramework, CurriculumLevel
 from reviews.models import Semester
 
-print("🌱 Seeding EduVoice Kenya...")
+print("🌱 Seeding EduVoice...")
 
 # ── SCHOOLS ──────────────────────────────────────────────────────────────────
+# Two schools on two different curricula, to prove the system isn't CBC-only.
 school, _ = School.objects.get_or_create(
     code='NRB001',
     defaults={
@@ -32,17 +33,35 @@ school, _ = School.objects.get_or_create(
     }
 )
 school2, _ = School.objects.get_or_create(
-    code='KSM001',
+    code='BRK001',
     defaults={
-        'name': 'Kisumu Model School',
-        'county': 'Kisumu',
-        'subscription_plan': 'basic',
+        'name': 'Brookhouse International School',
+        'county': 'Nairobi',
+        'sub_county': 'Karen',
+        'subscription_plan': 'pro',
         'is_active': True,
     }
 )
-print(f"  ✓ Schools: {school.name}, {school2.name}")
+print(f"  ✓ Schools: {school.name} (CBC), {school2.name} (Cambridge)")
 
-# ── CBC SUBJECTS ─────────────────────────────────────────────────────────────
+# ── CURRICULUM FRAMEWORKS ─────────────────────────────────────────────────────
+cbc, _ = CurriculumFramework.objects.get_or_create(
+    code='cbc', defaults={'name': 'CBC', 'country': 'Kenya',
+                           'description': "Kenya's Competency-Based Curriculum"}
+)
+cbc_primary, _ = CurriculumLevel.objects.get_or_create(framework=cbc, name='Primary', defaults={'order': 1})
+cbc_junior, _ = CurriculumLevel.objects.get_or_create(framework=cbc, name='Junior School', defaults={'order': 2})
+
+cambridge, _ = CurriculumFramework.objects.get_or_create(
+    code='cambridge', defaults={'name': 'Cambridge International', 'country': 'International',
+                                 'description': 'Cambridge Primary, Lower Secondary, IGCSE, A Level'}
+)
+cam_lower_sec, _ = CurriculumLevel.objects.get_or_create(framework=cambridge, name='Lower Secondary', defaults={'order': 1})
+cam_igcse, _ = CurriculumLevel.objects.get_or_create(framework=cambridge, name='IGCSE', defaults={'order': 2})
+
+print(f"  ✓ Curriculum frameworks: {CurriculumFramework.objects.count()} (CBC, Cambridge)")
+
+# ── CBC SUBJECTS (Nairobi Academy) ────────────────────────────────────────────
 primary_subjects = [
     ('English Language Activities', 'ENG-P', '📖', True),
     ('Kiswahili Language Activities', 'KIS-P', '🗣️', True),
@@ -74,18 +93,33 @@ junior_subjects = [
 for name, code, icon, is_core in primary_subjects:
     Subject.objects.get_or_create(
         code=code,
-        defaults={'name': name, 'level': 'primary', 'icon': icon, 'is_core': is_core}
+        defaults={'name': name, 'framework': cbc, 'level': cbc_primary, 'icon': icon, 'is_core': is_core}
     )
 
 for name, code, icon, is_core in junior_subjects:
     Subject.objects.get_or_create(
         code=code,
-        defaults={'name': name, 'level': 'junior', 'icon': icon, 'is_core': is_core}
+        defaults={'name': name, 'framework': cbc, 'level': cbc_junior, 'icon': icon, 'is_core': is_core}
     )
 
-print(f"  ✓ Subjects: {Subject.objects.count()} CBC-aligned subjects seeded")
+# ── CAMBRIDGE SUBJECTS (Brookhouse) ────────────────────────────────────────────
+igcse_subjects = [
+    ('English First Language', 'ENG-IG', '📖', True),
+    ('Mathematics', 'MATH-IG', '🔢', True),
+    ('Combined Science', 'SCI-IG', '🔬', True),
+    ('Global Perspectives', 'GP-IG', '🌍', True),
+    ('French', 'FR-IG', '🇫🇷', False),
+]
 
-# ── SOFT SKILLS ───────────────────────────────────────────────────────────────
+for name, code, icon, is_core in igcse_subjects:
+    Subject.objects.get_or_create(
+        code=code,
+        defaults={'name': name, 'framework': cambridge, 'level': cam_igcse, 'icon': icon, 'is_core': is_core}
+    )
+
+print(f"  ✓ Subjects: {Subject.objects.count()} across both frameworks")
+
+# ── SOFT SKILLS (framework-agnostic — every school gets these) ───────────────
 soft_skills_data = [
     ('Reading for Pleasure', 'reading', '📚',
      'Did you read books, stories, or articles for fun this term — not just for homework?'),
@@ -116,7 +150,7 @@ def make_user(username, first, last, role, school_obj, password='Pass1234!'):
         defaults={
             'first_name': first, 'last_name': last,
             'role': role, 'school': school_obj,
-            'email': f'{username}@eduvoice.ke'
+            'email': f'{username}@eduvoice.example'
         }
     )
     if created:
@@ -135,28 +169,38 @@ student4    = make_user('kevin.njoroge', 'Kevin', 'Njoroge', 'student', school)
 parent1     = make_user('parent.mwangi', 'Sarah', 'Mwangi', 'parent', school)
 parent2     = make_user('parent.kamau', 'John', 'Kamau', 'parent', school)
 
+# Brookhouse (Cambridge) users — proves a second, differently-structured school works end to end
+admin2      = make_user('admin.brookhouse', 'Admin', 'Brookhouse', 'admin', school2)
+teacher4    = make_user('mr.smith', 'James', 'Smith', 'teacher', school2)
+student5    = make_user('leila.khan', 'Leila', 'Khan', 'student', school2)
+
 # Superuser
 if not User.objects.filter(username='superadmin').exists():
-    User.objects.create_superuser('superadmin', 'superadmin@eduvoice.ke', 'Admin1234!', role='admin', school=school)
+    User.objects.create_superuser('superadmin', 'superadmin@eduvoice.example', 'Admin1234!', role='admin', school=school)
 
-print(f"  ✓ Users created: admin, 3 teachers, 4 students, 2 parents, superadmin")
+print(f"  ✓ Users created across both schools + superadmin")
 
 # ── CLASSROOMS ────────────────────────────────────────────────────────────────
 grade5a, _ = ClassRoom.objects.get_or_create(
-    school=school, grade=5, stream='A', academic_year=2025,
-    defaults={'name': 'Grade 5A', 'class_teacher': teacher1}
+    school=school, grade_label='Grade 5', stream='A', academic_year=2025,
+    defaults={'name': 'Grade 5A', 'curriculum_level': cbc_primary, 'class_teacher': teacher1}
 )
 grade7b, _ = ClassRoom.objects.get_or_create(
-    school=school, grade=7, stream='B', academic_year=2025,
-    defaults={'name': 'Grade 7B', 'class_teacher': teacher2}
+    school=school, grade_label='Grade 7', stream='B', academic_year=2025,
+    defaults={'name': 'Grade 7B', 'curriculum_level': cbc_junior, 'class_teacher': teacher2}
 )
-print(f"  ✓ Classrooms: Grade 5A, Grade 7B")
+year10_brookhouse, _ = ClassRoom.objects.get_or_create(
+    school=school2, grade_label='Year 10', stream='Blue', academic_year=2025,
+    defaults={'name': 'Year 10 Blue', 'curriculum_level': cam_igcse, 'class_teacher': teacher4}
+)
+print(f"  ✓ Classrooms: Grade 5A, Grade 7B (Nairobi Academy), Year 10 Blue (Brookhouse)")
 
 # ── ENROLLMENTS ───────────────────────────────────────────────────────────────
 for student in [student1, student2]:
     Enrollment.objects.get_or_create(student=student, classroom=grade5a)
 for student in [student3, student4]:
     Enrollment.objects.get_or_create(student=student, classroom=grade7b)
+Enrollment.objects.get_or_create(student=student5, classroom=year10_brookhouse)
 print(f"  ✓ Enrollments: students assigned to classrooms")
 
 # ── TEACHER ASSIGNMENTS ───────────────────────────────────────────────────────
@@ -166,6 +210,8 @@ sci_p   = Subject.objects.get(code='SCI-P')
 math_j  = Subject.objects.get(code='MATH-J')
 eng_j   = Subject.objects.get(code='ENG-J')
 isci_j  = Subject.objects.get(code='ISCI-J')
+math_ig = Subject.objects.get(code='MATH-IG')
+eng_ig  = Subject.objects.get(code='ENG-IG')
 
 TeacherAssignment.objects.get_or_create(teacher=teacher1, classroom=grade5a, subject=math_p)
 TeacherAssignment.objects.get_or_create(teacher=teacher1, classroom=grade5a, subject=sci_p)
@@ -173,14 +219,16 @@ TeacherAssignment.objects.get_or_create(teacher=teacher2, classroom=grade5a, sub
 TeacherAssignment.objects.get_or_create(teacher=teacher2, classroom=grade7b, subject=eng_j)
 TeacherAssignment.objects.get_or_create(teacher=teacher3, classroom=grade7b, subject=math_j)
 TeacherAssignment.objects.get_or_create(teacher=teacher3, classroom=grade7b, subject=isci_j)
-print(f"  ✓ Teacher assignments: 6 subject/class assignments")
+TeacherAssignment.objects.get_or_create(teacher=teacher4, classroom=year10_brookhouse, subject=math_ig)
+TeacherAssignment.objects.get_or_create(teacher=teacher4, classroom=year10_brookhouse, subject=eng_ig)
+print(f"  ✓ Teacher assignments: 8 subject/class assignments across both schools")
 
 # ── PARENT LINKS ──────────────────────────────────────────────────────────────
 ParentStudentLink.objects.get_or_create(parent=parent1, student=student1)
 ParentStudentLink.objects.get_or_create(parent=parent2, student=student2)
 print(f"  ✓ Parent-student links created")
 
-# ── SEMESTER ──────────────────────────────────────────────────────────────────
+# ── SEMESTERS (both schools) ──────────────────────────────────────────────────
 semester, _ = Semester.objects.get_or_create(
     school=school, academic_year=2025, term=2,
     defaults={
@@ -191,17 +239,30 @@ semester, _ = Semester.objects.get_or_create(
         'review_deadline': date(2025, 7, 30),
     }
 )
-print(f"  ✓ Semester: {semester.name} (reviews open: {semester.review_open})")
+semester2, _ = Semester.objects.get_or_create(
+    school=school2, academic_year=2025, term=2,
+    defaults={
+        'name': 'Term 2 — 2025',
+        'start_date': date(2025, 5, 6),
+        'end_date': date(2025, 7, 25),
+        'review_open': True,
+        'review_deadline': date(2025, 7, 30),
+    }
+)
+print(f"  ✓ Semesters open for both schools")
 
 print()
 print("✅ Seed complete! Login credentials:")
-print("   Superadmin  → superadmin / Admin1234!")
-print("   School admin → admin.nairobi / Pass1234!")
-print("   Teacher 1   → ms.wanjiku / Pass1234!")
-print("   Teacher 2   → mr.odhiambo / Pass1234!")
-print("   Student 1   → jane.mwangi / Pass1234!")
-print("   Student 2   → brian.kamau / Pass1234!")
-print("   Student 3   → amina.hassan / Pass1234! (Grade 7B)")
-print("   Parent 1    → parent.mwangi / Pass1234!")
+print("   Superadmin           → superadmin / Admin1234!")
+print("   Nairobi Academy (CBC):")
+print("     School admin       → admin.nairobi / Pass1234!")
+print("     Teacher            → ms.wanjiku / Pass1234!")
+print("     Student (Grade 5A) → jane.mwangi / Pass1234!")
+print("     Student (Grade 7B) → amina.hassan / Pass1234!")
+print("     Parent             → parent.mwangi / Pass1234!")
+print("   Brookhouse (Cambridge):")
+print("     School admin       → admin.brookhouse / Pass1234!")
+print("     Teacher            → mr.smith / Pass1234!")
+print("     Student (Year 10)  → leila.khan / Pass1234!")
 print()
 print("   Run: python manage.py runserver")

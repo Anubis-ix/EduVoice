@@ -9,11 +9,11 @@ services:
       - ALLOWED_HOSTS=localhost,127.0.0.1
       - EMAIL_BACKEND=console
     volumes:
-      # Live-reload source during development
+      # Live-reload source during dev. This bind mount already persists
+      # db.sqlite3 on your host machine between container restarts, so no
+      # separate volume is needed for it. (The previous config mounted a
+      # named volume directly onto the db.sqlite3 file path — Docker named
+      # volumes are always directories, so that silently turned db.sqlite3
+      # into a directory and broke `manage.py migrate` on every run.)
       - .:/app
-      # Persist the SQLite database across container restarts
-      - sqlite_data:/app/db.sqlite3
     command: python manage.py runserver 0.0.0.0:8000
-
-volumes:
-  sqlite_data:

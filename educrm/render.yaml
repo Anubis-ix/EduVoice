@@ -1,12 +1,27 @@
-# render.yaml — deploy EduVoice Kenya to Render (https://render.com)
+# render.yaml — deploy EduVoice to Render (https://render.com)
 #
 # HOW TO USE:
 #   1. Push this repo to GitHub.
 #   2. Go to https://dashboard.render.com → New → Blueprint.
 #   3. Connect your GitHub repo and set Blueprint Path to: educrm/render.yaml
-#   4. Click Apply — your app will be live at https://eduvoice-kenya.onrender.com
+#   4. Click Apply. Render provisions BOTH the web service and the database
+#      below, and wires DATABASE_URL between them automatically.
+#   5. After the first deploy, go to the web service → Environment tab and
+#      fill in EMAIL_HOST_USER / EMAIL_HOST_PASSWORD (see note below) —
+#      these are marked sync:false so they are never stored in this file
+#      or committed to a public repo.
 #
-# NOTE: Free tier spins down after 15 min of inactivity (first request ~30s cold start).
+# NOTE: Free tier web service spins down after 15 min of inactivity
+# (~30s cold start on the next request). The free Postgres database does
+# NOT spin down and does NOT lose data on redeploy — this is what actually
+# fixes accounts disappearing. SQLite on the web service's own disk was
+# being wiped on every redeploy/restart; Postgres lives in Render's
+# separate managed database service and survives all of that.
+
+databases:
+  - name: eduvoice-db
+    plan: free
+    region: oregon
 
 services:
   - type: web
@@ -24,5 +39,19 @@ services:
         value: "False"
       - key: ALLOWED_HOSTS
         value: ".onrender.com"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: eduvoice-db
+          property: connectionString
+
+      # Email — required for "forgot password" to actually deliver.
+      # Set EMAIL_BACKEND to "smtp" only once the two credentials below
+      # are filled in on the Render dashboard (Environment tab), or every
+      # password-reset link will silently go nowhere.
       - key: EMAIL_BACKEND
-        value: "console"
+        value: "smtp"
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+

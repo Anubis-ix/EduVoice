@@ -31,8 +31,15 @@ class School(models.Model):
 
 class ClassRoom(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='classrooms')
-    name = models.CharField(max_length=50)  # e.g. "Grade 4A"
-    grade = models.IntegerField()  # 1-9
+    name = models.CharField(max_length=50)  # e.g. "Grade 4A", "Year 10 Blue", "DP2 IB"
+    grade_label = models.CharField(
+        max_length=30, default='',
+        help_text="Free text: 'Grade 4', 'Year 10', 'Form 4', 'DP2' — whatever this school calls it"
+    )
+    curriculum_level = models.ForeignKey(
+        'curriculum.CurriculumLevel', on_delete=models.SET_NULL,
+        null=True, blank=True, related_name='classrooms'
+    )
     stream = models.CharField(max_length=10, default='A')
     academic_year = models.IntegerField()
     class_teacher = models.ForeignKey(
@@ -41,16 +48,17 @@ class ClassRoom(models.Model):
     )
 
     class Meta:
-        unique_together = ['school', 'grade', 'stream', 'academic_year']
+        unique_together = ['school', 'grade_label', 'stream', 'academic_year']
 
     def __str__(self):
-        return f"{self.school.name} - Grade {self.grade}{self.stream} ({self.academic_year})"
+        return f"{self.school.name} - {self.grade_label}{self.stream} ({self.academic_year})"
 
     @property
     def level(self):
-        if self.grade <= 6:
-            return 'primary'
-        return 'junior'
+        """Returns the school's own curriculum level name if set, else None.
+        Replaces the old hardcoded grade<=6 → 'primary' cutoff, which had
+        no meaning outside Kenya's 8-4-4/CBC structure."""
+        return self.curriculum_level.name if self.curriculum_level else None
 
 
 class Enrollment(models.Model):

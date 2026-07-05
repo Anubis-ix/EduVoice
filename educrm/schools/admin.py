@@ -9,8 +9,8 @@ class SchoolAdmin(admin.ModelAdmin):
 
 @admin.register(ClassRoom)
 class ClassRoomAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'school', 'grade', 'stream', 'academic_year', 'class_teacher']
-    list_filter = ['school', 'grade', 'academic_year']
+    list_display = ['__str__', 'school', 'grade_label', 'stream', 'academic_year', 'class_teacher']
+    list_filter = ['school', 'grade_label', 'academic_year']
 
 @admin.register(Enrollment)
 class EnrollmentAdmin(admin.ModelAdmin):
