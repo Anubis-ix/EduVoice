@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduVoice Kenya — School Feedback & CRM Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #1a6b3c;
+      --green-dark: #0d3d22;
+      --green-light: #27a85f;
+      --accent: #e8a020;
+      --bg: #f6f8f5;
+      --white: #ffffff;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.15rem; color: var(--green); }
+    .nav-brand .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+    .nav-links { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--muted); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--green); }
+    .btn-signin {
+      padding: 0.5rem 1.25rem; background: var(--green); color: white;
+      border-radius: 8px; font-size: 0.88rem; font-weight: 600; transition: background 0.2s;
+    }
+    .btn-signin:hover { background: var(--green-dark); color: white; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+      color: white; text-align: center; padding: 6rem 1.5rem 5rem;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+      padding: 4px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+      margin-bottom: 1.5rem; letter-spacing: 0.4px;
+    }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 800; line-height: 1.15; margin-bottom: 1.25rem; }
+    .hero h1 span { color: var(--accent); }
+    .hero p { font-size: 1.1rem; opacity: 0.88; max-width: 600px; margin: 0 auto 2.25rem; }
+    .hero-cta { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+    .btn-hero-primary {
+      padding: 0.85rem 2rem; background: white; color: var(--green);
+      border-radius: 10px; font-weight: 700; font-size: 1rem; transition: transform 0.2s;
+    }
+    .btn-hero-primary:hover { transform: translateY(-2px); }
+    .btn-hero-secondary {
+      padding: 0.85rem 2rem; background: transparent; color: white;
+      border: 2px solid rgba(255,255,255,0.45); border-radius: 10px;
+      font-weight: 600; font-size: 1rem; transition: border-color 0.2s;
+    }
+    .btn-hero-secondary:hover { border-color: white; }
+    .hero-roles { display: flex; justify-content: center; gap: 0.6rem; margin-top: 2.5rem; flex-wrap: wrap; }
+    .role-badge {
+      padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.12);
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 5rem 1.5rem; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--green); margin-bottom: 0.6rem; }
+    .section-title { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.75rem; }
+    .section-sub { font-size: 1rem; color: var(--muted); max-width: 560px; line-height: 1.7; }
+
+    /* ── STATS BAR ── */
+    .stats-bar { background: white; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .stats-bar .section-inner { display: flex; flex-wrap: wrap; justify-content: center; gap: 0; }
+    .stat-item { flex: 1; min-width: 180px; text-align: center; padding: 2.5rem 1.5rem; border-right: 1px solid var(--border); }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-size: 2.25rem; font-weight: 800; color: var(--green); display: block; }
+    .stat-desc { font-size: 0.84rem; color: var(--muted); margin-top: 4px; font-weight: 500; }
+
+    /* ── HOW IT WORKS ── */
+    .how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+    .step-card {
+      background: white; border-radius: 14px; padding: 1.75rem;
+      border: 1px solid var(--border); position: relative;
+      transition: box-shadow 0.2s;
+    }
+    .step-card:hover { box-shadow: 0 8px 30px rgba(26,107,60,0.1); }
+    .step-num {
+      width: 36px; height: 36px; background: var(--green); color: white;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem; margin-bottom: 1rem;
+    }
+    .step-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .step-card p { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── ROLE CARDS ── */
+    .roles-bg { background: linear-gradient(135deg, #f0fdf4 0%, #f6f8f5 100%); }
+    .roles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-top: 3rem; }
+    .role-card {
+      background: white; border-radius: 16px; padding: 2rem 1.75rem;
+      border: 2px solid transparent; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .role-card:hover { border-color: var(--green); box-shadow: 0 8px 30px rgba(26,107,60,0.1); }
+    .role-icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
+    .role-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .role-chip { display: inline-block; font-size: 0.68rem; font-weight: 600; padding: 2px 8px; border-radius: 12px; margin-bottom: 0.75rem; }
+    .chip-student { background: #d1fae5; color: #065f46; }
+    .chip-teacher { background: #dbeafe; color: #1e40af; }
+    .chip-parent  { background: #fef3c7; color: #92400e; }
+    .chip-admin   { background: #ede9fe; color: #5b21b6; }
+    .role-card ul { list-style: none; padding: 0; margin-top: 0.75rem; }
+    .role-card ul li { font-size: 0.84rem; color: var(--muted); padding: 3px 0; padding-left: 1.1rem; position: relative; }
+    .role-card ul li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+
+    /* ── CBC SECTION ── */
+    .cbc-card {
+      background: white; border-radius: 16px; padding: 2.5rem;
+      border: 1px solid var(--border); display: grid;
+      grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;
+      margin-top: 3rem;
+    }
+    .cbc-subjects { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+    .subject-tag { padding: 4px 12px; background: #f0fdf4; color: var(--green); border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .subject-tag.junior { background: #eff6ff; color: #1d4ed8; }
+    .grade-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-top: 1.25rem; margin-bottom: 0.4rem; }
+
+    /* ── FEATURES ── */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+    .feature-item { display: flex; gap: 1rem; }
+    .feature-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
+    .feature-item h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 3px; }
+    .feature-item p { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── CTA BANNER ── */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+      border-radius: 20px; padding: 3.5rem 2.5rem; text-align: center; color: white;
+      margin-top: 2rem;
+    }
+    .cta-banner h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; margin-bottom: 0.75rem; }
+    .cta-banner p { opacity: 0.85; max-width: 480px; margin: 0 auto 2rem; font-size: 0.95rem; }
+    .btn-cta {
+      display: inline-block; padding: 0.9rem 2.25rem; background: white;
+      color: var(--green); border-radius: 10px; font-weight: 700; font-size: 1rem;
+      transition: transform 0.2s;
+    }
+    .btn-cta:hover { transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--text); color: rgba(255,255,255,0.7);
+      padding: 3rem 1.5rem 2rem;
+    }
+    .footer-inner { max-width: 1100px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2.5rem; margin-bottom: 2.5rem; }
+    .footer-brand { font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+    .footer-tagline { font-size: 0.83rem; line-height: 1.6; }
+    .footer-col h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: white; margin-bottom: 0.85rem; }
+    .footer-col a { display: block; font-size: 0.84rem; color: rgba(255,255,255,0.6); padding: 2px 0; transition: color 0.2s; }
+    .footer-col a:hover { color: white; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.78rem; }
+    .footer-links { display: flex; gap: 1.25rem; }
+    .footer-links a { color: rgba(255,255,255,0.55); transition: color 0.2s; }
+    .footer-links a:hover { color: white; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 1rem; }
+      .nav-links .nav-hide { display: none; }
+      .stat-item { min-width: 140px; }
+      .cbc-card { grid-template-columns: 1fr; gap: 1.5rem; }
+      .footer-grid { grid-template-columns: 1fr; gap: 1.75rem; }
+    }
+    @media (max-width: 480px) {
+      .hero { padding: 4rem 1rem 3.5rem; }
+      section { padding: 3.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav>
+  <div class="nav-brand">
+    <span>🎓</span>
+    <span class="dot"></span>
+    EduVoice Kenya
+  </div>
+  <div class="nav-links">
+    <a href="#how-it-works" class="nav-hide">How It Works</a>
+    <a href="#roles" class="nav-hide">Who It's For</a>
+    <a href="#cbc" class="nav-hide">CBC Aligned</a>
+    <a href="/accounts/register/" class="nav-hide" style="font-weight:600;">Create Account</a>
+    <a href="/accounts/login/" class="btn-signin">Sign In →</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-badge">🇰🇪 Built for Kenyan Schools · CBC Aligned</div>
+  <h1>Where Every Learner's<br><span>Voice</span> Drives School Growth</h1>
+  <p>EduVoice Kenya is a secure, multi-role feedback and CRM platform that connects students, teachers, parents, and school administrators — all scoped to your school.</p>
+  <div class="hero-cta">
+    <a href="/accounts/register/" class="btn-hero-primary">Create Your Account →</a>
+    <a href="/accounts/login/" class="btn-hero-secondary">Sign In</a>
+  </div>
+  <div class="hero-roles">
+    <span class="role-badge">👩‍🎓 Students (Grades 1–9)</span>
+    <span class="role-badge">👩‍🏫 Teachers</span>
+    <span class="role-badge">👨‍👩‍👧 Parents</span>
+    <span class="role-badge">🏫 School Admins</span>
+  </div>
+</section>
+
+<!-- ── STATS BAR ── -->
+<div class="stats-bar">
+  <div class="section-inner">
+    <div class="stat-item">
+      <span class="stat-num">4</span>
+      <span class="stat-desc">Distinct User Roles</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">22</span>
+      <span class="stat-desc">CBC-Aligned Subjects</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">6</span>
+      <span class="stat-desc">Soft Skill Dimensions</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">5</span>
+      <span class="stat-desc">Review Dimensions per Subject</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── HOW IT WORKS ── -->
+<section id="how-it-works">
+  <div class="section-inner">
+    <div class="section-label">Process</div>
+    <h2 class="section-title">A Clear Loop from Classroom to Leadership</h2>
+    <p class="section-sub">EduVoice closes the feedback gap between what happens in class and what school leaders can act on.</p>
+    <div class="how-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Admin Opens Review Period</h3>
+        <p>The school admin activates a semester's review window. Students can only submit within this controlled period.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>Students Submit Reviews</h3>
+        <p>Each student rates their learning experience per subject across five CBC-aligned dimensions — anonymously.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Teachers See Aggregated Insights</h3>
+        <p>Teachers receive anonymous, averaged feedback — no individual identities, just clear signals for improvement.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <h3>Parents Track Their Child</h3>
+        <p>Parents see their child's subject ratings, soft skill self-ratings, and can leave an encouraging note.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">5</div>
+        <h3>Admin Reviews CRM Analytics</h3>
+        <p>School leadership gets participation rates, subject enjoyment rankings, and teacher clarity scores — private to admin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHO IT'S FOR ── -->
+<section id="roles" class="roles-bg">
+  <div class="section-inner">
+    <div class="section-label">Roles</div>
+    <h2 class="section-title">Built for Every Stakeholder in Your School</h2>
+    <p class="section-sub">One platform, four distinct experiences — each tailored to what matters most to that role.</p>
+    <div class="roles-grid">
+
+      <div class="role-card">
+        <span class="role-icon">👩‍🎓</span>
+        <span class="role-chip chip-student">Student</span>
+        <h3>Students</h3>
+        <ul>
+          <li>End-of-term subject reviews</li>
+          <li>Soft skills self-rating (6 dimensions)</li>
+          <li>Fully anonymous to teachers</li>
+          <li>Positive CBC-framed questions</li>
+          <li>Grades 1–9 (Primary + Junior)</li>
+        </ul>
+      </div>
+
+      <div class="role-card">
+        <span class="role-icon">👩‍🏫</span>
+        <span class="role-chip chip-teacher">Teacher</span>
+        <h3>Teachers</h3>
+        <ul>
+          <li>Aggregated anonymous feedback</li>
+          <li>Subject and class breakdowns</li>
+          <li>Open-text student comments</li>
+          <li>Self-assessment form</li>
+          <li>Next-term goal setting</li>
+        </ul>
+      </div>
+
+      <div class="role-card">
+        <span class="role-icon">👨‍👩‍👧</span>
+        <span class="role-chip chip-parent">Parent</span>
+        <h3>Parents</h3>
+        <ul>
+          <li>Per-child subject rating report</li>
+          <li>Soft skill self-rating view</li>
+          <li>Child's open-text reflections</li>
+          <li>Leave an encouraging note</li>
+          <li>Multi-child support</li>
+        </ul>
+      </div>
+
+      <div class="role-card">
+        <span class="role-icon">🏫</span>
+        <span class="role-chip chip-admin">School Admin</span>
+        <h3>School Admins</h3>
+        <ul>
+          <li>School-wide CRM analytics</li>
+          <li>Participation rate tracking</li>
+          <li>Subject enjoyment rankings</li>
+          <li>Teacher clarity leaderboard</li>
+          <li>Semester open/close toggle</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CBC SECTION ── -->
+<section id="cbc">
+  <div class="section-inner">
+    <div class="section-label">Curriculum Alignment</div>
+    <h2 class="section-title">Fully Aligned to Kenya's CBC Framework</h2>
+    <p class="section-sub">Every subject seeded from the KICD Basic Education Curriculum Framework (2019) and KICD Senior School development documents.</p>
+    <div class="cbc-card">
+      <div>
+        <h3 style="font-weight:700; margin-bottom:0.25rem;">22 Pre-loaded Subjects</h3>
+        <p style="color: var(--muted); font-size:0.84rem;">All subjects from both levels included out of the box — no manual setup required.</p>
+        <div class="grade-label">Primary — Grades 1–6</div>
+        <div class="cbc-subjects">
+          <span class="subject-tag">English</span>
+          <span class="subject-tag">Kiswahili</span>
+          <span class="subject-tag">Mathematics</span>
+          <span class="subject-tag">Environmental Activities</span>
+          <span class="subject-tag">Creative Activities</span>
+          <span class="subject-tag">Science &amp; Technology</span>
+          <span class="subject-tag">Agriculture</span>
+          <span class="subject-tag">Social Studies</span>
+          <span class="subject-tag">Home Science</span>
+          <span class="subject-tag">Physical Education</span>
+          <span class="subject-tag">Religious Education</span>
+        </div>
+        <div class="grade-label">Junior School — Grades 7–9</div>
+        <div class="cbc-subjects">
+          <span class="subject-tag junior">English</span>
+          <span class="subject-tag junior">Kiswahili / KSL</span>
+          <span class="subject-tag junior">Mathematics</span>
+          <span class="subject-tag junior">Integrated Science</span>
+          <span class="subject-tag junior">Pre-Technical Studies</span>
+          <span class="subject-tag junior">Social Studies</span>
+          <span class="subject-tag junior">Creative Arts &amp; Sports</span>
+          <span class="subject-tag junior">Business Studies</span>
+          <span class="subject-tag junior">Health Education</span>
+          <span class="subject-tag junior">Agriculture</span>
+          <span class="subject-tag junior">Religious Education</span>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-weight:700; margin-bottom:0.25rem;">6 Soft Skill Dimensions</h3>
+        <p style="color: var(--muted); font-size:0.84rem;">CBC's holistic learner values tracked per student, per term.</p>
+        <div style="margin-top:1rem; display:flex; flex-direction:column; gap:0.65rem;">
+          <div style="display:flex; align-items:center; gap:0.75rem; padding:0.75rem; background:#f9fafb; border-radius:10px;">
+            <span style="font-size:1.2rem;">📚</span>
+            <div>
+              <div style="font-weight:600; font-size:0.88rem;">Reading for Pleasure</div>
+              <div style="font-size:0.75rem; color:var(--muted);">Love of reading beyond school</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.75rem; padding:0.75rem; background:#f9fafb; border-radius:10px;">
+            <span style="font-size:1.2rem;">🤔</span>
+            <div>
+              <div style="font-weight:600; font-size:0.88rem;">Asking Why (Curiosity)</div>
+              <div style="font-size:0.75rem; color:var(--muted);">Critical thinking habit</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.75rem; padding:0.75rem; background:#f9fafb; border-radius:10px;">
+            <span style="font-size:1.2rem;">🎤</span>
+            <div>
+              <div style="font-weight:600; font-size:0.88rem;">Public Speaking</div>
+              <div style="font-size:0.75rem; color:var(--muted);">Communication confidence</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.75rem; padding:0.75rem; background:#f9fafb; border-radius:10px;">
+            <span style="font-size:1.2rem;">🤝</span>
+            <div>
+              <div style="font-weight:600; font-size:0.88rem;">Teamwork</div>
+              <div style="font-size:0.75rem; color:var(--muted);">Collaboration skills</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.75rem; padding:0.75rem; background:#f9fafb; border-radius:10px;">
+            <span style="font-size:1.2rem;">🌿</span>
+            <div>
+              <div style="font-weight:600; font-size:0.88rem;">Environmental Care</div>
+              <div style="font-size:0.75rem; color:var(--muted);">Sustainability awareness</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.75rem; padding:0.75rem; background:#f9fafb; border-radius:10px;">
+            <span style="font-size:1.2rem;">👩‍💼</span>
+            <div>
+              <div style="font-weight:600; font-size:0.88rem;">Adult Interaction</div>
+              <div style="font-size:0.75rem; color:var(--muted);">Respect &amp; communication with adults</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── KEY FEATURES ── -->
+<section style="background:white; border-top:1px solid var(--border);">
+  <div class="section-inner">
+    <div class="section-label">Platform Principles</div>
+    <h2 class="section-title">Designed Around Trust &amp; Privacy</h2>
+    <p class="section-sub">Every design decision protects the people using it — especially children.</p>
+    <div class="features-grid">
+      <div class="feature-item">
+        <div class="feature-icon">🔒</div>
+        <div>
+          <h4>Anonymity Enforced at Code Level</h4>
+          <p>Teachers only see aggregated averages. Student identities are never shown to teachers — ever. This is enforced in the view layer, not just by policy.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🏫</div>
+        <div>
+          <h4>Multi-Tenant from Day One</h4>
+          <p>Each school's data is fully isolated. Adding a new school is a single record — no code changes. Built for SaaS deployment across many schools.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🗓️</div>
+        <div>
+          <h4>Admin-Controlled Review Periods</h4>
+          <p>Students can only submit reviews when a school admin opens the semester window. No unsolicited collection of student data.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📊</div>
+        <div>
+          <h4>CRM Analytics for Leadership</h4>
+          <p>School admins see participation rates, subject enjoyment trends, and teacher clarity ratings — private data that never reaches teachers or parents.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">💚</div>
+        <div>
+          <h4>Positive, CBC-Framed Questions</h4>
+          <p>Reviews ask "what did you love?" and "what made you curious?" — not complaint forms. Encouraging reflection, not judgment.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📱</div>
+        <div>
+          <h4>Mobile-Ready Interface</h4>
+          <p>Fully responsive with a mobile bottom navigation bar. Students can submit reviews from any device — no app download required.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section>
+  <div class="section-inner">
+    <div class="cta-banner">
+      <h2>Ready to Give Your Learners a Voice?</h2>
+      <p>Create your school's account to start collecting meaningful feedback this term.</p>
+      <a href="/accounts/register/" class="btn-cta">Create Your Account →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">🎓 EduVoice Kenya</div>
+        <p class="footer-tagline">A multi-tenant school feedback and CRM platform aligned to Kenya's Competency-Based Curriculum. Connecting students, teachers, parents, and school leaders.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#roles">Who It's For</a>
+        <a href="#cbc">CBC Alignment</a>
+        <a href="/accounts/register/">Create Account</a>
+        <a href="/accounts/login/">Sign In</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="/terms/">Terms &amp; Conditions</a>
+        <a href="/privacy/">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 EduVoice Kenya. All rights reserved.</span>
+      <div class="footer-links">
+        <a href="/terms/">Terms</a>
+        <a href="/privacy/">Privacy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

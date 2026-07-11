@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard — EduVoice{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Hi {{ user.first_name }} 👋</h1>
+  <p>{% if user.school %}{{ user.school.name }}{% endif %}{% if enrollment %} · {{ enrollment.classroom }}{% endif %}</p>
+</div>
+
+{% if semester %}
+  {% if completed_reviews < total_reviews %}
+  <!-- ONE primary action, not a wall of stats -->
+  <div class="hero-action">
+    <div>
+      <div class="label">{{ semester.name }}</div>
+      <div class="headline">{{ remaining_reviews }} review{{ remaining_reviews|pluralize }} left to do</div>
+      <div class="sub">{{ completed_reviews }} of {{ total_reviews }} done · takes about 2 minutes each</div>
+    </div>
+    <a href="{% url 'student_review_home' %}" class="btn-white">Continue →</a>
+  </div>
+  {% else %}
+  <div class="hero-action" style="background: linear-gradient(135deg, #166534, #14532d);">
+    <div>
+      <div class="label">{{ semester.name }}</div>
+      <div class="headline">All caught up 🎉</div>
+      <div class="sub">You've completed every review this term. Nice work.</div>
+    </div>
+    <a href="{% url 'student_review_home' %}" class="btn-white">View Reviews →</a>
+  </div>
+  {% endif %}
+
+  <div class="card">
+    <div class="card-header">Term progress</div>
+    <div class="progress-bar"><div class="progress-fill" data-pct="{{ progress_pct }}"></div></div>
+    <p style="font-size:0.78rem; color:var(--muted); margin-top:6px;">{{ progress_pct }}% complete</p>
+  </div>
+{% else %}
+<div class="card">
+  <div class="empty-state">
+    <div class="icon">📋</div>
+    <p>No review period open right now. Check back when your school opens the next term.</p>
+  </div>
+</div>
+{% endif %}
+
+{% if past_reviews %}
+<div class="card">
+  <div class="card-header">Recent reviews</div>
+  {% for review in past_reviews %}
+  <div class="row-item">
+    <div>
+      <div style="font-weight:600; font-size:0.88rem;">{{ review.assignment.subject.name }}</div>
+      <div style="font-size:0.76rem; color:var(--muted);">{{ review.semester.name }}</div>
+    </div>
+    <span class="chip chip-green">⭐ {{ review.average_rating }}/5</span>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
